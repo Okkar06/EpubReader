@@ -48,6 +48,9 @@
 
     useEffect(() => {
       document.documentElement.dataset.theme = resolvedTheme;
+      // Tints the browser / status bar to match the page.
+      const canvas = getComputedStyle(document.documentElement).getPropertyValue('--canvas').trim();
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', `rgb(${canvas.split(/\s+/).join(',')})`);
     }, [resolvedTheme]);
 
     // Accepts a partial object or a function (current) => partial.

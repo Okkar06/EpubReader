@@ -44,7 +44,7 @@
         aria-label="Search in book"
         aria-hidden=${!open}
         inert=${open ? undefined : ''}
-        className=${`glass fixed bottom-0 right-0 top-0 z-50 flex w-[360px] max-w-[90vw] flex-col border-l border-line/10 shadow-pop transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] ${
+        className=${`glass safe-top safe-bottom fixed bottom-0 right-0 top-0 z-50 flex w-[360px] max-w-[90vw] flex-col rounded-l-3xl border-l border-line/10 shadow-pop transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] ${
           open ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

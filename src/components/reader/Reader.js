@@ -25,6 +25,7 @@
     SearchPanel,
     SelectionPopup,
     NoteDialog,
+    AppearancePopover,
     Icon,
   } = Books;
 
@@ -413,7 +414,7 @@
       goTo(book.locations.cfiFromPercentage(clamp(pct, 0, 1)));
     }
 
-    // Click/tap on the outer 20% of the page turns it.
+    // Click/tap on the outer 20% of the page turns it; the middle shows or hides the bars.
     function tapAt(clientX) {
       if (popupRef.current) {
         setPopup(null);
@@ -424,7 +425,10 @@
       const rel = (clientX - rect.left) / rect.width;
       if (rel < 0.2) goLeft();
       else if (rel > 0.8) goRight();
-      else poke();
+      else if (chromeVisible) {
+        clearTimeout(hideTimer.current);
+        setChromeVisible(false);
+      } else poke();
     }
 
     // ---------- Bookmarks ----------
@@ -711,15 +715,18 @@
           onHighlights=${() => toggleSidebar('highlights')}
           onBookmark=${toggleBookmark}
           onToggleAppearance=${() => setAppearanceOpen((o) => !o)}
-          onCloseAppearance=${() => setAppearanceOpen(false)}
           onHover=${setHoverChrome}
         />
+        ${appearanceOpen && html`<${AppearancePopover} onClose=${() => setAppearanceOpen(false)} />`}
 
         <!-- Reading area. Fixed top/bottom insets so hiding the chrome never re-paginates. -->
         <main
           ref=${stageRef}
-          className="absolute inset-x-0 bottom-14 top-14"
-          style=${{ paddingLeft: margin, paddingRight: margin }}
+          className="reader-stage"
+          style=${{
+            paddingLeft: `calc(${margin}px * var(--margin-scale) + env(safe-area-inset-left))`,
+            paddingRight: `calc(${margin}px * var(--margin-scale) + env(safe-area-inset-right))`,
+          }}
           onClick=${(e) => {
             if (e.target.closest('button')) return;
             setAppearanceOpen(false);

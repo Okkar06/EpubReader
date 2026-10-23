@@ -44,14 +44,14 @@
 
     const { book } = menu;
     const item =
-      'focus-ring flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-left text-[13px] hover:bg-accent hover:text-white focus-visible:bg-accent focus-visible:text-white';
+      'focus-ring flex w-full items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-left text-[13px] hover:bg-accent hover:text-white focus-visible:bg-accent focus-visible:text-white pointer-coarse:py-2.5 pointer-coarse:text-[15px]';
 
     return html`
       <div
         ref=${ref}
         role="menu"
         aria-label=${`Options for ${book.title}`}
-        className="glass fixed z-50 w-52 animate-pop-in rounded-xl border border-line/10 p-1 shadow-pop"
+        className="glass fixed z-50 w-56 animate-pop-in rounded-2xl border border-line/10 p-1 shadow-pop"
         style=${pos}
       >
         <button role="menuitem" className=${item} onClick=${() => onOpen(book.id)}>

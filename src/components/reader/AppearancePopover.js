@@ -2,7 +2,7 @@
   const { html, useEffect, useRef, useSettings, FONTS, FONT_SIZE, LINE_HEIGHTS, PAGE_THEMES, THEME_OPTIONS, clamp, Segmented } =
     Books;
 
-  /** Apple Books–style "Aa" panel: theme, size, font, spacing, margins, alignment, layout. */
+  /** Apple Books–style "Aa" panel: theme, size, font, spacing, margins, alignment, layout. A bottom sheet on phones. */
   function AppearancePopover({ onClose }) {
     const { settings, update } = useSettings();
     const ref = useRef(null);
@@ -12,8 +12,8 @@
       const onDown = (e) => {
         if (!ref.current?.contains(e.target) && !e.target.closest?.('[data-aa-trigger]')) onClose();
       };
-      document.addEventListener('mousedown', onDown);
-      return () => document.removeEventListener('mousedown', onDown);
+      document.addEventListener('pointerdown', onDown);
+      return () => document.removeEventListener('pointerdown', onDown);
     }, [onClose]);
 
     const step = (d) => update((s) => ({ fontSize: clamp(s.fontSize + d, FONT_SIZE.min, FONT_SIZE.max) }));
@@ -24,7 +24,7 @@
         ref=${ref}
         role="dialog"
         aria-label="Appearance settings"
-        className="glass thin-scroll absolute right-0 top-full mt-2 max-h-[calc(100vh-5rem)] w-[300px] origin-top-right animate-pop-in space-y-5 overflow-y-auto rounded-2xl border border-line/10 p-4 shadow-pop"
+        className="glass thin-scroll fixed z-40 max-h-[70dvh] origin-bottom animate-slide-up space-y-5 overflow-y-auto rounded-3xl border border-line/10 p-4 shadow-pop max-sm:inset-x-2 max-sm:bottom-[calc(env(safe-area-inset-bottom)+0.5rem)] sm:right-[max(1rem,calc(50vw-24rem+0.5rem))] sm:top-[calc(env(safe-area-inset-top)+4rem)] sm:max-h-[calc(100dvh-5rem)] sm:w-[300px] sm:origin-top-right sm:animate-pop-in"
       >
         <!-- Themes -->
         <div>

@@ -1,9 +1,19 @@
 # Books — a local EPUB reader
 
-A desktop-first EPUB reader that runs entirely in your browser, inspired by Apple Books on macOS.
+An EPUB reader for desktop and iPhone that runs entirely in your browser, inspired by Apple Books on macOS.
 There is no backend: books, covers, progress, bookmarks, highlights and settings are stored in IndexedDB on your device.
 
 **Nothing to install.** No Node.js, no npm, no build step. All libraries are already in the `vendor/` folder, so the app also works offline.
+
+## On iPhone / iPad
+
+The app is published with GitHub Pages at **https://okkar06.github.io/EpubReader/**. Every `git push` to `main` redeploys it, usually within a minute or two.
+
+1. Open the link in **Safari**.
+2. Tap **Share → Add to Home Screen**.
+3. Launch **Books** from the Home Screen. It runs full-screen like an app and works offline.
+
+Books are stored on the device you add them on. Your iPhone and your computer each keep their own library.
 
 ## Running it
 
@@ -72,6 +82,8 @@ If corporate policy blocks PowerShell scripts, use option 1, or open the folder 
 
 ```
 index.html                     Loads vendor libraries, then the app scripts in order
+manifest.webmanifest, sw.js    Installable app (Add to Home Screen) and offline cache
+icons/                         Home Screen icons
 Start Reader.cmd, serve.ps1    Optional local server (no installs)
 vendor/                        React 18.3.1, ReactDOM, htm 3.1.1, Dexie 4.0.8, JSZip 3.10.1, epub.js 0.3.93, Tailwind 3.4.17
 src/

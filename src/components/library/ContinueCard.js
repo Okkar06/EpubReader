@@ -12,7 +12,7 @@
           onMenu(book, e.clientX, e.clientY);
         }}
         aria-label=${`Continue reading ${book.title}, ${formatPercent(book.progress)} read`}
-        className="focus-ring group flex items-center gap-4 rounded-xl bg-surface p-3 text-left transition-colors hover:bg-line/[0.07]"
+        className="glass focus-ring group flex items-center gap-4 rounded-2xl border border-line/10 p-3 text-left transition-transform active:scale-[0.98]"
       >
         <${Cover} book=${book} className="w-16 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5" />
         <div className="min-w-0 flex-1">

@@ -23,15 +23,15 @@
     return html`
       <${Fragment}>
         <footer
-          onMouseEnter=${() => onHover(true)}
-          onMouseLeave=${() => onHover(false)}
+          onPointerEnter=${(e) => e.pointerType === 'mouse' && onHover(true)}
+          onPointerLeave=${(e) => e.pointerType === 'mouse' && onHover(false)}
           onFocusCapture=${() => onHover(true)}
           onBlurCapture=${() => onHover(false)}
-          className=${`fixed inset-x-0 bottom-0 z-30 transition-all duration-300 ease-out ${
+          className=${`safe-x fixed inset-x-0 bottom-0 z-30 px-2 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] transition-all duration-300 ease-out ${
             visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
           }`}
         >
-          <div className="glass border-t border-line/10 px-5 pb-2.5 pt-2">
+          <div className="glass mx-auto max-w-3xl rounded-2xl border border-line/10 px-4 pb-2.5 pt-2 shadow-pop sm:px-5">
             <div className="mb-1.5 flex items-center justify-between gap-4 text-[11px] text-muted">
               <span className="min-w-0 truncate font-medium text-ink/80">${loc?.chapter || ' '}</span>
               ${pagesLeft != null &&
@@ -56,7 +56,7 @@
                 aria-valuetext=${`${formatPercent(pct)} read`}
                 style=${{ '--val': `${pct * 100}%` }}
               />
-              <span className="w-36 shrink-0 text-right text-[11px] tabular-nums text-muted">
+              <span className="shrink-0 text-right text-[11px] tabular-nums text-muted sm:w-36">
                 ${pageLabel}
                 ${locationsReady && drag == null && html`<span className="ml-1.5 text-ink/70">${formatPercent(pct)}</span>`}
               </span>
@@ -67,7 +67,7 @@
         <!-- Minimal persistent indicator while the bar is hidden -->
         <div
           aria-hidden="true"
-          className=${`pointer-events-none fixed inset-x-0 bottom-3 z-20 text-center text-[11px] tabular-nums text-muted transition-opacity duration-300 ${
+          className=${`pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+0.75rem)] z-20 text-center text-[11px] tabular-nums text-muted transition-opacity duration-300 ${
             visible || !locationsReady ? 'opacity-0' : 'opacity-70'
           }`}
         >

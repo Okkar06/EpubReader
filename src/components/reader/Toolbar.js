@@ -1,7 +1,7 @@
 (() => {
-  const { html, IconButton, AppearancePopover } = Books;
+  const { html, IconButton } = Books;
 
-  /** Auto-hiding translucent top bar. Hovering or focusing it keeps it visible. */
+  /** Auto-hiding floating glass bar. Hovering (mouse) or focusing it keeps it visible. */
   function Toolbar({
     visible,
     title,
@@ -15,41 +15,37 @@
     onHighlights,
     onBookmark,
     onToggleAppearance,
-    onCloseAppearance,
     onHover,
   }) {
     return html`
       <header
-        onMouseEnter=${() => onHover(true)}
-        onMouseLeave=${() => onHover(false)}
+        onPointerEnter=${(e) => e.pointerType === 'mouse' && onHover(true)}
+        onPointerLeave=${(e) => e.pointerType === 'mouse' && onHover(false)}
         onFocusCapture=${() => onHover(true)}
         onBlurCapture=${() => onHover(false)}
-        className=${`fixed inset-x-0 top-0 z-30 transition-all duration-300 ease-out ${
+        className=${`safe-x fixed inset-x-0 top-0 z-30 px-2 pt-[calc(env(safe-area-inset-top)+0.5rem)] transition-all duration-300 ease-out ${
           visible ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-2 opacity-0'
         }`}
       >
-        <div className="glass flex h-12 items-center gap-1 border-b border-line/10 px-3">
+        <div className="glass mx-auto flex h-12 max-w-3xl items-center gap-0.5 rounded-2xl border border-line/10 px-1.5 shadow-pop sm:gap-1">
           <${IconButton} icon="chevronLeft" label="Back to Library" onClick=${onBack} />
           <${IconButton} icon="list" label="Table of Contents (T)" active=${sidebarTab === 'toc'} onClick=${onToc} />
 
-          <p className="min-w-0 flex-1 truncate px-3 text-center text-[13px] font-semibold text-ink/85">${title}</p>
+          <p className="min-w-0 flex-1 truncate px-1 text-center text-[13px] font-semibold text-ink/85 sm:px-3">${title}</p>
 
           <${IconButton} icon="search" label="Search in Book (F)" active=${searchOpen} onClick=${onSearch} />
-          <div className="relative">
-            <button
-              type="button"
-              data-aa-trigger="true"
-              aria-label="Appearance"
-              title="Appearance"
-              aria-expanded=${appearanceOpen}
-              aria-haspopup="dialog"
-              onClick=${onToggleAppearance}
-              className=${`btn-icon w-9 font-book text-[15px] ${appearanceOpen ? 'bg-line/10 text-ink' : ''}`}
-            >
-              <span aria-hidden="true"><span className="text-[12px]">A</span>a</span>
-            </button>
-            ${appearanceOpen && html`<${AppearancePopover} onClose=${onCloseAppearance} />`}
-          </div>
+          <button
+            type="button"
+            data-aa-trigger="true"
+            aria-label="Appearance"
+            title="Appearance"
+            aria-expanded=${appearanceOpen}
+            aria-haspopup="dialog"
+            onClick=${onToggleAppearance}
+            className=${`btn-icon w-9 font-book text-[15px] ${appearanceOpen ? 'bg-line/10 text-ink' : ''}`}
+          >
+            <span aria-hidden="true"><span className="text-[12px]">A</span>a</span>
+          </button>
           <${IconButton}
             icon="highlighter"
             label="Highlights & Notes"

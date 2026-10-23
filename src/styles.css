@@ -1,6 +1,12 @@
 /* ---------- Theme tokens (RGB triplets so Tailwind can apply alpha) ---------- */
 :root,
 [data-theme='light'] {
+  --wall-1: 255 170 90;
+  --wall-2: 120 170 255;
+  --wall-3: 255 130 190;
+  --wall-alpha: 0.45;
+  --glass-alpha: 0.55;
+  --glass-shine: inset 0 1px 0 0 rgba(255, 255, 255, 0.85), inset 0 0 0 0.5px rgba(255, 255, 255, 0.5);
   --canvas: 255 255 255;
   --surface: 245 245 247;
   --elevated: 255 255 255;
@@ -11,6 +17,12 @@
   color-scheme: light;
 }
 [data-theme='sepia'] {
+  --wall-1: 230 170 100;
+  --wall-2: 200 150 110;
+  --wall-3: 240 190 140;
+  --wall-alpha: 0.4;
+  --glass-alpha: 0.6;
+  --glass-shine: inset 0 1px 0 0 rgba(255, 250, 240, 0.8), inset 0 0 0 0.5px rgba(255, 250, 240, 0.45);
   --canvas: 248 241 227;
   --surface: 241 231 211;
   --elevated: 252 247 237;
@@ -21,6 +33,12 @@
   color-scheme: light;
 }
 [data-theme='gray'] {
+  --wall-1: 255 159 10;
+  --wall-2: 100 130 200;
+  --wall-3: 170 110 190;
+  --wall-alpha: 0.28;
+  --glass-alpha: 0.5;
+  --glass-shine: inset 0 1px 0 0 rgba(255, 255, 255, 0.22), inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
   --canvas: 74 74 77;
   --surface: 86 86 90;
   --elevated: 98 98 102;
@@ -31,6 +49,12 @@
   color-scheme: dark;
 }
 [data-theme='dark'] {
+  --wall-1: 255 120 30;
+  --wall-2: 60 90 220;
+  --wall-3: 170 60 170;
+  --wall-alpha: 0.3;
+  --glass-alpha: 0.5;
+  --glass-shine: inset 0 1px 0 0 rgba(255, 255, 255, 0.18), inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
   --canvas: 28 28 30;
   --surface: 44 44 46;
   --elevated: 44 44 46;
@@ -53,20 +77,60 @@ body {
   color: rgb(var(--ink));
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', Inter, 'Segoe UI', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Reading-page margins shrink on phones (multiplies the Aa "Margins" setting). */
+:root {
+  --margin-scale: 1;
+}
+@media (max-width: 640px) {
+  :root {
+    --margin-scale: 0.4;
+  }
+}
+
+/* ---------- Safe areas (iPhone notch / home indicator) ---------- */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Soft colour wallpaper behind the library so the glass has something to refract. */
+.wallpaper {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(42rem 32rem at 8% -8%, rgb(var(--wall-1) / var(--wall-alpha)), transparent 70%),
+    radial-gradient(36rem 30rem at 100% 12%, rgb(var(--wall-2) / var(--wall-alpha)), transparent 70%),
+    radial-gradient(44rem 36rem at 45% 112%, rgb(var(--wall-3) / var(--wall-alpha)), transparent 70%),
+    rgb(var(--canvas));
 }
 
 /* ---------- Shared components (Tailwind utilities load later, so they can override these) ---------- */
 
-/* Translucent macOS-style material */
+/* iOS-style "liquid glass" material: translucent, blurred, with a bright specular edge. */
 .glass {
-  background-color: rgb(var(--elevated) / 0.72);
-  -webkit-backdrop-filter: saturate(180%) blur(24px);
-  backdrop-filter: saturate(180%) blur(24px);
+  background-color: rgb(var(--elevated) / var(--glass-alpha));
+  -webkit-backdrop-filter: saturate(190%) blur(28px);
+  backdrop-filter: saturate(190%) blur(28px);
+  box-shadow: var(--glass-shine), 0 8px 32px -12px rgba(0, 0, 0, 0.25);
 }
 /* Panels, popovers and menus sit over text, so they need a more solid material to stay legible. */
 .glass:is([role='dialog'], [role='alertdialog'], [role='menu'], [role='toolbar'], aside) {
-  background-color: rgb(var(--elevated) / 0.94);
+  background-color: rgb(var(--elevated) / 0.86);
+  -webkit-backdrop-filter: saturate(190%) blur(40px);
+  backdrop-filter: saturate(190%) blur(40px);
 }
 
 .focus-ring:focus-visible,
@@ -201,6 +265,38 @@ body {
 [data-theme='light'] .rd-hl,
 [data-theme='sepia'] .rd-hl {
   mix-blend-mode: multiply;
+}
+
+/* Bigger touch targets, and no iOS zoom-on-focus (needs >= 16px inputs). */
+@media (pointer: coarse) {
+  .btn-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+  .input {
+    font-size: 16px;
+  }
+  .btn,
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.5rem 0.875rem;
+    font-size: 15px;
+  }
+}
+/* Controls that only appear on hover stay visible on touch screens. */
+@media (hover: none) {
+  .reveal-on-hover {
+    opacity: 1 !important;
+  }
+}
+
+/* ---------- Reader layout ---------- */
+.reader-stage {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(env(safe-area-inset-top) + 4rem);
+  bottom: calc(env(safe-area-inset-bottom) + 4rem);
 }
 
 /* Thin, unobtrusive scrollbars in panels */

@@ -50,7 +50,7 @@
           type="button"
           onClick=${() => onOpen(book.id)}
           aria-label=${`Open ${label}`}
-          className="focus-ring flex aspect-[2/3] items-end rounded-[5px] transition-transform duration-200 hover:-translate-y-1"
+          className="focus-ring flex aspect-[2/3] items-end rounded-[5px] transition-transform duration-200 hover:-translate-y-1 active:scale-[0.97]"
         >
           <${Cover} book=${book} className="w-full transition-shadow duration-200 group-hover:shadow-cover-hover" />
         </button>

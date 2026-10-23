@@ -57,13 +57,13 @@
           aria-label="Book navigation"
           aria-hidden=${!open}
           inert=${open ? undefined : ''}
-          className=${`glass fixed bottom-0 left-0 top-0 z-50 flex w-[340px] max-w-[88vw] flex-col border-r border-line/10 shadow-pop transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] ${
+          className=${`glass safe-top safe-bottom fixed bottom-0 left-0 top-0 z-50 flex w-[340px] max-w-[88vw] flex-col rounded-r-3xl border-r border-line/10 shadow-pop transition-transform duration-300 ease-[cubic-bezier(.2,.8,.2,1)] ${
             open ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           <div className="flex items-center gap-2 px-4 pb-2 pt-3">
             <p className="min-w-0 flex-1 truncate text-[13px] font-semibold">${title}</p>
-            <button className="btn-icon h-7 w-7" aria-label="Close sidebar" onClick=${onClose}>
+            <button className="btn-icon h-8 w-8" aria-label="Close sidebar" onClick=${onClose}>
               <${Icon} name="close" size=${15} />
             </button>
           </div>
@@ -80,7 +80,7 @@
                   tabIndex=${tab === t.id ? 0 : -1}
                   onClick=${() => onTab(t.id)}
                   onKeyDown=${onTabKey}
-                  className=${`focus-ring flex-1 rounded-md py-1 text-xs font-medium transition-all ${
+                  className=${`focus-ring flex-1 rounded-md py-1 text-xs font-medium transition-all pointer-coarse:py-1.5 pointer-coarse:text-[13px] ${
                     tab === t.id ? 'bg-elevated text-ink shadow-sm' : 'text-muted hover:text-ink'
                   }`}
                 >
@@ -144,7 +144,7 @@
   }
 
   function BookmarkList({ bookmarks, onNavigate, onDelete }) {
-    if (!bookmarks.length) return html`<${Empty}>No bookmarks yet. Press B to bookmark the current page.<//>`;
+    if (!bookmarks.length) return html`<${Empty}>No bookmarks yet. Tap the bookmark button (or press B) to bookmark the current page.<//>`;
     return html`
       <ul className="space-y-0.5">
         ${bookmarks.map(
@@ -165,7 +165,7 @@
                 type="button"
                 aria-label="Delete bookmark"
                 onClick=${() => onDelete(b)}
-                className="btn-icon absolute right-1.5 top-2 h-7 w-7 opacity-0 focus-visible:opacity-100 group-hover:opacity-100"
+                className="btn-icon reveal-on-hover absolute right-1.5 top-2 h-7 w-7 opacity-0 focus-visible:opacity-100 group-hover:opacity-100"
               >
                 <${Icon} name="trash" size=${14} />
               </button>
@@ -200,7 +200,7 @@
                   html`<span className="mt-1.5 block rounded-md bg-line/[0.06] px-2 py-1 text-xs text-ink/80">${h.note}</span>`}
                 </span>
               </button>
-              <div className="absolute right-1.5 top-2 flex opacity-0 focus-within:opacity-100 group-hover:opacity-100">
+              <div className="reveal-on-hover absolute right-1.5 top-2 flex opacity-0 focus-within:opacity-100 group-hover:opacity-100">
                 <button type="button" aria-label="Edit note" onClick=${() => onEditNote(h)} className="btn-icon h-7 w-7">
                   <${Icon} name="note" size=${14} />
                 </button>

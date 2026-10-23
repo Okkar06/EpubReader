@@ -101,11 +101,13 @@
 
     return html`
       <div className="relative min-h-full" onDragEnter=${onDragEnter} onDragLeave=${onDragLeave} onDragOver=${onDragOver} onDrop=${onDrop}>
-        <!-- Header -->
-        <header className="glass sticky top-0 z-20 border-b border-line/10">
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-6 py-3 md:px-10">
-            <h1 className="mr-auto text-xl font-bold tracking-tight">Library</h1>
-            <label className="relative">
+        <div className="wallpaper" aria-hidden="true" />
+
+        <!-- Header: on phones the search field drops to its own full-width row. -->
+        <header className="glass safe-top safe-x sticky top-0 z-20 border-b border-line/10">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-2 gap-y-2.5 px-4 py-3 sm:gap-x-3 sm:px-6 md:px-10">
+            <h1 className="mr-auto text-[28px] font-bold leading-tight tracking-tight sm:text-xl">Library</h1>
+            <label className="relative order-last w-full sm:order-none sm:w-auto">
               <span className="sr-only">Search library</span>
               <${Icon} name="search" size=${15} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted" />
               <input
@@ -114,7 +116,7 @@
                 value=${query}
                 onChange=${(e) => setQuery(e.target.value)}
                 placeholder="Search"
-                className="input w-56 pl-8"
+                className="input w-full pl-8 sm:w-56"
               />
             </label>
             <label className="relative flex items-center">
@@ -130,8 +132,13 @@
                 <option value="author">Author</option>
               </select>
             </label>
-            <button type="button" className="btn-primary" onClick=${() => fileInput.current?.click()}>
-              <${Icon} name="plus" size=${15} strokeWidth=${2.2} /> Add Book
+            <button
+              type="button"
+              className="btn-primary rounded-full"
+              aria-label="Add Book"
+              onClick=${() => fileInput.current?.click()}
+            >
+              <${Icon} name="plus" size=${15} strokeWidth=${2.2} /> <span className="max-[380px]:hidden">Add Book</span>
             </button>
             <input
               ref=${fileInput}
@@ -147,19 +154,19 @@
           </div>
         </header>
 
-        <main className="mx-auto max-w-7xl px-6 pb-24 pt-8 md:px-10">
+        <main className="safe-x mx-auto max-w-7xl px-4 pb-24 pt-6 sm:px-6 sm:pt-8 md:px-10">
           ${books === null && html`<p className="text-sm text-muted">Loading library…</p>`}
 
           ${isEmpty &&
           html`
-            <div className="mx-auto mt-16 flex max-w-md flex-col items-center rounded-3xl border-2 border-dashed border-line/15 px-8 py-16 text-center">
+            <div className="glass mx-auto mt-10 flex max-w-md flex-col items-center rounded-3xl border border-line/10 px-8 py-14 text-center sm:mt-16">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/15 text-accent">
                 <${Icon} name="book" size=${28} />
               </div>
               <h2 className="text-lg font-semibold">Your library is empty</h2>
               <p className="mt-1.5 text-sm text-muted">
-                Drag EPUB files here, or click <span className="font-medium text-ink">Add Book</span>. Everything stays on
-                this device.
+                Tap <span className="font-medium text-ink">Add Book</span> to choose EPUB files, or drag them here. Everything
+                stays on this device.
               </p>
             </div>
           `}
@@ -167,8 +174,8 @@
           ${!query &&
           continueReading.length > 0 &&
           html`
-            <section aria-labelledby="continue-heading" className="mb-12">
-              <h2 id="continue-heading" className="mb-4 text-[15px] font-semibold">Continue Reading</h2>
+            <section aria-labelledby="continue-heading" className="mb-10 sm:mb-12">
+              <h2 id="continue-heading" className="mb-3 text-[17px] font-semibold sm:mb-4 sm:text-[15px]">Continue Reading</h2>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 ${continueReading.map((b) => html`<${ContinueCard} key=${b.id} book=${b} onOpen=${onOpen} onMenu=${openMenu} />`)}
               </div>
@@ -180,13 +187,13 @@
           html`
             <section aria-labelledby="all-heading">
               <div className="mb-4 flex items-baseline gap-2">
-                <h2 id="all-heading" className="text-[15px] font-semibold">${query ? 'Results' : 'All Books'}</h2>
+                <h2 id="all-heading" className="text-[17px] font-semibold sm:text-[15px]">${query ? 'Results' : 'All Books'}</h2>
                 <span className="text-xs text-muted">${visible.length}</span>
               </div>
               ${visible.length === 0
                 ? html`<p className="py-10 text-center text-sm text-muted">No books match “${query}”.</p>`
                 : html`
-                    <div className="grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] gap-x-7 gap-y-9 md:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-x-4 gap-y-7 sm:grid-cols-[repeat(auto-fill,minmax(130px,1fr))] sm:gap-x-7 sm:gap-y-9 md:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
                       ${visible.map((b) => html`<${BookCard} key=${b.id} book=${b} onOpen=${onOpen} onMenu=${openMenu} />`)}
                     </div>
                   `}
@@ -207,7 +214,7 @@
 
         <!-- Import progress & errors -->
         <div
-          className="fixed bottom-6 left-1/2 z-40 flex w-[min(28rem,calc(100vw-2rem))] -translate-x-1/2 flex-col gap-2"
+          className="fixed bottom-[calc(env(safe-area-inset-bottom)+1.5rem)] left-1/2 z-40 flex w-[min(28rem,calc(100vw-2rem))] -translate-x-1/2 flex-col gap-2"
           aria-live="polite"
         >
           ${importing &&
