@@ -205,6 +205,11 @@ body {
 .input::placeholder {
   color: rgb(var(--muted));
 }
+/* Native dropdown lists don't pick up the translucent .input background, so theme the options explicitly. */
+select.input option {
+  background-color: rgb(var(--elevated));
+  color: rgb(var(--ink));
+}
 
 .section-label {
   font-size: 11px;
