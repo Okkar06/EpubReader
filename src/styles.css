@@ -1,0 +1,219 @@
+/* ---------- Theme tokens (RGB triplets so Tailwind can apply alpha) ---------- */
+:root,
+[data-theme='light'] {
+  --canvas: 255 255 255;
+  --surface: 245 245 247;
+  --elevated: 255 255 255;
+  --ink: 29 29 31;
+  --muted: 134 134 139;
+  --line: 0 0 0;
+  --accent: 255 149 0;
+  color-scheme: light;
+}
+[data-theme='sepia'] {
+  --canvas: 248 241 227;
+  --surface: 241 231 211;
+  --elevated: 252 247 237;
+  --ink: 91 70 54;
+  --muted: 145 120 98;
+  --line: 91 70 54;
+  --accent: 200 110 20;
+  color-scheme: light;
+}
+[data-theme='gray'] {
+  --canvas: 74 74 77;
+  --surface: 86 86 90;
+  --elevated: 98 98 102;
+  --ink: 235 235 237;
+  --muted: 185 185 190;
+  --line: 255 255 255;
+  --accent: 255 159 10;
+  color-scheme: dark;
+}
+[data-theme='dark'] {
+  --canvas: 28 28 30;
+  --surface: 44 44 46;
+  --elevated: 44 44 46;
+  --ink: 229 229 231;
+  --muted: 152 152 157;
+  --line: 255 255 255;
+  --accent: 255 159 10;
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: rgb(var(--canvas));
+  color: rgb(var(--ink));
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', Inter, 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ---------- Shared components (Tailwind utilities load later, so they can override these) ---------- */
+
+/* Translucent macOS-style material */
+.glass {
+  background-color: rgb(var(--elevated) / 0.72);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  backdrop-filter: saturate(180%) blur(24px);
+}
+/* Panels, popovers and menus sit over text, so they need a more solid material to stay legible. */
+.glass:is([role='dialog'], [role='alertdialog'], [role='menu'], [role='toolbar'], aside) {
+  background-color: rgb(var(--elevated) / 0.94);
+}
+
+.focus-ring:focus-visible,
+.btn-icon:focus-visible,
+.btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(var(--accent) / 0.7);
+}
+
+.btn-icon {
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  color: rgb(var(--ink) / 0.75);
+  transition: background-color 0.15s, color 0.15s;
+}
+.btn-icon:hover {
+  background-color: rgb(var(--line) / 0.1);
+  color: rgb(var(--ink));
+}
+.btn-icon:disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.btn,
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.15s, filter 0.15s;
+}
+.btn-primary {
+  background-color: rgb(var(--accent));
+  color: #fff;
+}
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+.btn-primary:active {
+  filter: brightness(0.95);
+}
+.btn-secondary {
+  background-color: rgb(var(--line) / 0.07);
+  color: rgb(var(--ink));
+}
+.btn-secondary:hover {
+  background-color: rgb(var(--line) / 0.12);
+}
+
+.input {
+  border-radius: 0.5rem;
+  border: 1px solid rgb(var(--line) / 0.1);
+  background-color: rgb(var(--line) / 0.05);
+  padding: 0.375rem 0.75rem;
+  font-size: 13px;
+  color: rgb(var(--ink));
+}
+.input::placeholder {
+  color: rgb(var(--muted));
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: rgb(var(--muted));
+}
+
+/* ---------- Slim range slider ---------- */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  width: 100%;
+  border-radius: 999px;
+  cursor: pointer;
+  background: linear-gradient(
+    to right,
+    rgb(var(--accent)) var(--val, 0%),
+    rgb(var(--line) / 0.15) var(--val, 0%)
+  );
+}
+.slider:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s;
+}
+.slider:hover::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+.slider:focus-visible {
+  outline: 2px solid rgb(var(--accent) / 0.7);
+  outline-offset: 4px;
+}
+
+/* ---------- epub.js annotation marks (live in the main document, above the iframe) ---------- */
+.rd-hl {
+  mix-blend-mode: normal;
+  cursor: pointer;
+}
+[data-theme='light'] .rd-hl,
+[data-theme='sepia'] .rd-hl {
+  mix-blend-mode: multiply;
+}
+
+/* Thin, unobtrusive scrollbars in panels */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--line) / 0.2) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
